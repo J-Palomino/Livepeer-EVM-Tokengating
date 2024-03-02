@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 const Start = () => {
@@ -11,13 +12,15 @@ const Start = () => {
                     <div className="text-slate-950 text-base font-normal ">
                         Get started with No Bananas and enjoy a safe streaming experience.
                     </div>
-                    <Link href='/nodes' target='_blank' className="px-12 py-3 md:py-4 bg-white rounded-3xl backdrop-blur-lg justify-start items-center gap-1 inline-flex hover:shadow-lg hover:shadow-white/30 transition-all duration-300 hover:scale-95 group"
+                    <Link href='/create' target='_blank' className="px-12 py-3 md:py-4 bg-white rounded-3xl backdrop-blur-lg justify-start items-center gap-1 inline-flex hover:shadow-lg hover:shadow-white/30 transition-all duration-300 hover:scale-95 group"
                     >
                         <span className="text-slate-950 text-base font-bold leading-snug group-hover:scale-95 transition-all duration-100">Start Now</span>
                     </Link>
 
                 </div>
-                {/* <Image src={chip} alt="Chip" width={500} height={500} className="w-64 md:w-2/5 md:mb-36 md:-mr-16" /> */}
+
+                    <Image src="/assets/cancel.png" alt="Chip" width={500} height={500} className="w-64 md:w-2/5 md:mb-36 md:-mr-16" />
+
             </div>
         </div>
     )

@@ -7,7 +7,6 @@ export default function Hero() {
   const [onInputChange, setOnInputChange] = useState("");
   return (
     <>
-      <Nav />
       <section className="relative py-24 sm:py-16 lg:pt-44 lg:pb-32 bg-white md:max-w-6xl md:mx-auto md:px-0 px-6">
         <div className="w-full mx-auto sm:px-6 lg:px-0">
           <div className="flex flex-col-reverse md:flex-row mx-auto lg:items-center gap-y-12 lg:gap-x-8">
@@ -19,10 +18,13 @@ export default function Hero() {
                     style={{ color: "#FFA800" }}
                   >
                     N
-                    <span className="md:text-5xl">
-                      🚫{' '}
+                    <span className="md:hidden">
+                      o
                     </span>
-                    Bananas 🍌
+                    <span className="hidden md:inline-block md:text-5xl">
+                      🚫
+                    </span>
+                    {' '}Bananas 🍌
                   </span>
                 </h1>
                 <p className="hidden md:block mt-2 md:text-lg text-gray-400 sm:mt-4 font-sans">
@@ -32,15 +34,15 @@ export default function Hero() {
               <div className="mt-4 md:mt-8 text-center lg:text-left flex gap-2">
                 <Button
                   to="/create"
-                  className="bg-primary border-primary text-background md:px-10 py-3 md:py-4 hover:border-primary hover:text-primary hover:bg-background w-full text-sm md:text-base"
+                  className="bg-primary border-primary text-background md:px-10 py-3 md:py-4 hover:border-primary hover:text-primary hover:bg-background w-full md:w-1/2 text-sm md:text-base"
                 >
-                  Discover How
+                  Start Now
                 </Button>
                 <Button
                   onClick={() => setShowModal(true)}
                   className="border-primary md:px-10 py-3 md:py-4 text-primary hover:bg-primary hover:text-background w-full text-sm md:text-base"
                 >
-                  Watch stream
+                  Live stream
                 </Button>
               </div>
             </div>

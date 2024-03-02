@@ -20,7 +20,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   const scrollToSection = (sectionId: string) => {
     setIsMenuOpen(false);
@@ -81,10 +81,12 @@ const Navbar = () => {
             href={'/'}
             className='cursor-pointer transition-all duration-300 flex items-center gap-1.5'
           >
-            <h1 className="text-black text-lg md:text-2xl"
-              style={{ background: 'linear-gradient(94deg, #E52200 0%, #FFA800 100%)', color: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', }}
-            >N🚫 Bananas {' '}</h1>
-            <span className='md:text-3xl'>🍌</span>
+            <Image
+              src="/assets/logos/logo.png"
+              alt="No Bananas"
+              width={200}
+              height={200}
+            />
           </Link>
           <div className="relative">
             <div className="md:hidden">
@@ -163,15 +165,15 @@ const Navbar = () => {
                 className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">FAQ</li>
             </ul>
           </div>
-          <Link href='/create' className="">
-            {
-              isConnected ? (
-                <ConnectKitButton />
-              ) : (
+          {
+            isConnected ? (
+              <ConnectKitButton />
+            ) : (
+              <Link href='/create' className="">
                 <MovingBorderDemo />
-              )
-            }
-          </Link>
+              </Link>
+            )
+          }
         </div>
       </div>
       <div className='bg-white/5 max-w-5xl mx-auto' style={{

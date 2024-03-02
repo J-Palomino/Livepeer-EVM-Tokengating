@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Hero } from "../components";
+import { Hero, Nav } from "../components";
 import { StickyScrollRevealDemo } from "../components/home/StickyScrollRevealDemo";
 import { TracingBeam } from "../components/ui/tracing-beam";
 import Section from "../components/home/Section";
@@ -29,6 +29,7 @@ export default function Home() {
         <meta name="twitter:description" content="Join No Bananas in making live streaming fun and safe again. Our AI moderation technology keeps the surprises out and the fun in." />
         <meta name="twitter:image" content="https://www.nobananas.com/path/to/twitter-image.jpg" />
       </Head>
+      <Nav />
       <Hero />
       {/* <StickyScrollRevealDemo /> */}
       <div className="pl-4 md:px-0">
