@@ -7,15 +7,13 @@ if (typeof window !== 'undefined') {
 }
 
 export default function Broadcast(props: { streamID: any; }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamRef = useRef<MediaStream>(null);
-
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return; // Add this line to guard against null
     const context = canvas.getContext('2d');
 
     async function setupCamera() {
@@ -25,8 +23,7 @@ export default function Broadcast(props: { streamID: any; }) {
           video.srcObject = mediaStream;
           video.play();
         }
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const streamRef = useRef<MediaStream | null>(null);
+        streamRef.current = mediaStream;
       } catch (err) {
         console.error('An error occurred:', err);
       }
@@ -35,8 +32,8 @@ export default function Broadcast(props: { streamID: any; }) {
     if (canvas && video) {
       video.addEventListener('play', () => {
         function draw() {
-          if (video!.paused || video!.ended) return;
-          context?.drawImage(video!, 0, 0, canvas!.width, canvas!.height);
+          if (video.paused || video.ended) return;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
           requestAnimationFrame(draw);
         }
         draw();
@@ -47,7 +44,7 @@ export default function Broadcast(props: { streamID: any; }) {
 
     return () => {
       if (video && video.srcObject) {
-        (video.srcObject as MediaStream).getTracks().forEach((track: { stop: () => any; }) => track.stop());
+        video.srcObject.getTracks().forEach((track: { stop: () => any; }) => track.stop());
       }
     };
   }, []);
@@ -72,14 +69,14 @@ export default function Broadcast(props: { streamID: any; }) {
             console.error(err);
             return;
           }
-          const ctx = canvasRef.current?.getContext('2d');
-          ctx?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+          const ctx = canvasRef.current.getContext('2d');
+          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
           results.forEach(({ label, x, y, width, height }) => {
-            ctx?.beginPath();
-            ctx!.fillStyle = "#FF0000";
-            ctx?.fillText(label, x, y - 5);
-            ctx?.rect(x, y, width, height);
-            ctx?.stroke();
+            ctx.beginPath();
+            ctx.fillStyle = "#FF0000";
+            ctx.fillText(label, x, y - 5);
+            ctx.rect(x, y, width, height);
+            ctx.stroke();
           });
         });
       };
@@ -107,7 +104,6 @@ export default function Broadcast(props: { streamID: any; }) {
     //   });
     // }
     // });
-
     const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
     const host = new URL(redirectUrl).host;
@@ -124,10 +120,7 @@ export default function Broadcast(props: { streamID: any; }) {
     ];
 
     // get user media from the browser (which are camera/audio sources)
-    // Ensure mediaStream is obtained from the user's camera and microphone
-    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-
+    const mediaStream = stream
     const peerConnection = new RTCPeerConnection({ iceServers });
 
 
