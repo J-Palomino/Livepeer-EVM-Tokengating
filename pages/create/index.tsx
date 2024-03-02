@@ -90,7 +90,7 @@ export default function Create() {
   return (
     <>
       <Nav />
-      <div className="flex flex-col items-center justify-center mx-8 md:mx-12">
+      <div className="flex flex-col items-center justify-center mx-12">
         <>
           {
             isConnected ?
@@ -118,19 +118,22 @@ export default function Create() {
                   <p className="ml-2 text-black">{stream?.streamKey}</p>
                 </div> */}
 
-                    {/* <div className="flex mt-2">
+                    <div className="flex mt-2">
                       <p className="w-32 font-regular text-zinc-500">
                         Ingest URL:{" "}
                       </p>
+                      {/* <p className="ml-2 text-black hover:text-primary hover:cursor-pointer">
+                        {stream?.rtmpIngestUrl}
+                      </p> */}
 
                       <Link target="_blank" href={`${window.location.origin}/watch/${stream?.playbackId}`}>
                         {window.location.origin}/watch/${stream?.playbackId}
                       </Link>
 
-                    </div> */}
+                    </div>
                   </div>
-                  { typeof window !== "undefined" &&
-                    <Broadcast streamID={stream.streamKey}/>}
+
+                  <Broadcast streamID={stream.streamKey} />
                   <Button
                     className={`bg-orange-300 text-black px-5 py-3 mt-2 border-none  ml-6 `}
                     text="text-md"
@@ -142,12 +145,17 @@ export default function Create() {
                 </div>
               ) : (
                 <>
-                  <div className="flex flex-col items-center justify-center w-full h-screen space-y-4 md:w-1/3">
-                    <label className="text-black md:text-3xl">Connected account</label>
-                    <p className="text-xs font-semibold text-black md:text-lg">{address}</p>
-                    <div className="flex justify-end mt-2">
+                  <div className="w-1/3 mt-44">
+                    <input
+                      // label="Connected account"
+                      placeholder={`${address}`}
+                      onChange={(e) => setStreamName(e.target.value)}
+                      value={address}
+                      className="w-full h-12 px-4 text-sm text-white border-2 rounded-md border-primary bg-slate-900"
+                    />
+                    <div className="flex justify-end">
                       <Button
-                        className={`bg-primary border-primary text-background px-4 py-2.5 ${status === "loading" || !address
+                        className={`bg-primary border-primary text-background px-4 py-2.5 ${status === "loading" || !address || !streamName
                           ? "cursor-not-allowed opacity-20"
                           : ""
                           }`}
