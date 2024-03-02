@@ -4,6 +4,7 @@ import { StickyScrollRevealDemo } from "../components/home/StickyScrollRevealDem
 import { TracingBeam } from "../components/ui/tracing-beam";
 import Section from "../components/home/Section";
 import Start from "../components/home/Start";
+import Footer from "../components/footer";
 
 export default function Home() {
   return (
@@ -36,6 +37,7 @@ export default function Home() {
         <Section />
       </div>
       <Start />
+      <Footer />
     </>
   )
 }

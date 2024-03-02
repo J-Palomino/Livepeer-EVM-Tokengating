@@ -2,6 +2,7 @@ import React from 'react'
 import { TracingBeam } from '../ui/tracing-beam'
 import { MeteorsDemo } from './MeteorsDemo'
 import { BackgroundGradientDemo } from './BackgroundGradientDemo'
+import { CardHoverEffectDemo } from './CardHoverEffectDemo'
 
 const Section = () => {
     return (
@@ -36,7 +37,7 @@ const Section = () => {
                     <MeteorsDemo title='Community Trust' description='Build and maintain trust within your viewer base by providing consistently safe viewing experiences' />
                 </div>
             </div>
-            <div id='roadmap' className='space-y-8 my-16'>
+            <div id='roadmap' className='space-y-0 my-16'>
                 <div className='space-y-2'>
                     <h3 className='text-3xl'>
                         Roadmap
@@ -45,11 +46,7 @@ const Section = () => {
                         We are committed to making No Bananas the go-to tool for safe live streaming. Our roadmap outlines our plans for the future, including new features and improvements to the platform.
                     </p>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8'>
-                    <MeteorsDemo title='Real-Time Moderation' description='Instant banana 🍌 detection and censorship, keeping streams PG friendly' />
-                    <MeteorsDemo title='Decentralized live streaming' description='Tailor moderation levels to fit your needs, from strict to more relaxed settings' />
-                    <MeteorsDemo title='Community Trust' description='Build and maintain trust within your viewer base by providing consistently safe viewing experiences' />
-                </div>
+                <CardHoverEffectDemo />
             </div>
         </TracingBeam>
 

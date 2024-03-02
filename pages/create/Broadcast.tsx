@@ -15,7 +15,7 @@ const dimensions = {
 
 
 
-export default function Broadcast(props:any) {
+export default function Broadcast(props: any) {
   // populate the canvas element with the users webcam
   const webcamRef = useRef();
   const canvasRef = useRef();
@@ -25,19 +25,19 @@ export default function Broadcast(props:any) {
   useEffect(() => {
     let detectionInterval;
 
-    const modelLoaded = () => {
-      if
-      webcamRef.current.video.width = width;
-      webcamRef.current.video.height = height;
-      canvasRef.current.width = width;
-      canvasRef.current.height = height;
+    // const modelLoaded = () => {
+    //   if
+    //   webcamRef.current.video.width = width;
+    //   webcamRef.current.video.height = height;
+    //   canvasRef.current.width = width;
+    //   canvasRef.current.height = height;
 
 
-      detectionInterval = setInterval(() => {
-        detect();
-      }, 200);
-    };
-  const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+    //   detectionInterval = setInterval(() => {
+    //     detect();
+    //   }, 200);
+    // };
+    // const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
   }, []);
   useEffect(() => {
     const video = document.createElement("video");
