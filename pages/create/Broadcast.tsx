@@ -9,7 +9,7 @@ import 'webrtc';
 
 
 
-export default function Broadcast() {
+export default function Broadcast(props:any) {
   // populate the canvas element with the users webcam
   useEffect(() => {
     const video = document.createElement("video");
@@ -38,7 +38,7 @@ export default function Broadcast() {
   const startStream = async () => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const stream = canvas.captureStream(30);
-    const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/c84c-6dgz-iij5-mt1u`;
+    const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
     const host = new URL(redirectUrl).host;
     console.log("host", host);
@@ -130,7 +130,7 @@ export default function Broadcast() {
 
   //returning the page component
   return (
-    <div className="flex flex-col w-full items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full">
       {/* html canvas element that is populated by users webcam */}
       <canvas id="canvas" width="400" height="500"></canvas>
       {/* button to start the live stream */}
@@ -141,18 +141,6 @@ export default function Broadcast() {
       >
         Start Stream!
       </Button>
-
-      {/* html canvas element that is populated by users webcam */}
-      <canvas id="canvas" width="1920" height="720"></canvas>
-      {/* button to start the live stream */}
-      <Button
-        className={`bg-primary border-primary text-background px-4 py-2.5`}
-        text="text-sm"
-        onClick={() => startStream()}
-      >
-        Start Stream!
-      </Button>
-
     </div>
   );
 }

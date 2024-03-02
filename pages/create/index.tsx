@@ -88,7 +88,6 @@ export default function Create() {
   };
 
   const { address, isConnecting, isDisconnected, isConnected } = useAccount();
-
   return (
     <>
       <Nav />
@@ -134,7 +133,8 @@ export default function Create() {
 
                     </div>
                   </div>
-                  <Broadcast />
+                  
+                  <Broadcast streamID={stream.streamKey}/>
                   <Button
                     className={`bg-zinc-700 text-black px-5 py-3 mt-2 border-none  ml-6 ${!shareLink ? " cursor-not-allowed opacity-20 " : ""
                       }`}
