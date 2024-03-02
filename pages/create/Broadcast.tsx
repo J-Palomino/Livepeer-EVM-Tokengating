@@ -1,34 +1,83 @@
 //React functional component that takes the users camera and microphone places it in a canvas element then streams it to a livepeer stream
 // This is the main page for the broadcast feature
 
-import React, { useEffect} from "react";
+
+import React, { useEffect, useState, useRef } from "react";
+import { Page, Nav } from "../../components";
 import { Button } from "../../components/shared";
 import * as ml5 from "ml5";
 import 'webrtc';
+
+const dimensions = {
+  width: 800,
+  height: 500
+}
 
 
 
 export default function Broadcast(props: any) {
   // populate the canvas element with the users webcam
-  let canvas = document.getElementById("canvas") as HTMLCanvasElement;
-  let stream = canvas.captureStream(30);
-  const startStream = async () => {
+  const webcamRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { width, height } = dimensions;
 
-    // objectDetector.detect(stream, (err:any, results:any) => {
-  
-      // const ctx = canvas.getContext('2d');
-      // ctx?.clearRect(0, 0, canvas.width, canvas.height);
-      // if (results && results.length) {
-      //   results.forEach((detection:any) => {
-      //     ctx?.beginPath();
-      //     ctx ? ctx.fillStyle = "#FF0000" : null;
-      //     const { label, x, y, width, height } = detection;
-      //     ctx?.fillText(label, x, y - 5);
-      //     ctx?.rect(x, y, width, height);
-      //     ctx?.stroke();
-      //   });
-      // }
-    // });
+  const detect = async () => {
+    if (webcamRef.current && canvasRef.current) {
+      const video = webcamRef.current;
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+      if (context) {
+        video.width = width;
+        video.height = height;
+        context.drawImage(video, 0, 0, width, height);
+      }
+    }
+  }
+
+  useEffect(() => {
+    let detectionInterval;
+
+    const modelLoaded = () => {
+      if (webcamRef.current && canvasRef.current) {
+        webcamRef.current.width = width;
+        webcamRef.current.height = height;
+        canvasRef.current.width = width;
+        canvasRef.current.height = height;
+      }
+
+      detectionInterval = setInterval(() => {
+        detect();
+      }, 200);
+    };
+    const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+  }, []);
+  useEffect(() => {
+    const video = document.createElement("video");
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const context = canvas.getContext("2d");
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(function (err) {
+          console.log("An error occurred: " + err);
+        });
+    }
+    video.addEventListener("play", function () {
+      setInterval(function () {
+        context?.drawImage(video, 0, 0, 640, 480);
+      }, 16);
+    });
+  }, []);
+
+
+
+  const startStream = async () => {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const stream = canvas.captureStream(30);
     const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
     const host = new URL(redirectUrl).host;
@@ -117,79 +166,13 @@ export default function Broadcast(props: any) {
     }
 
   };
-  
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const video = document.createElement("video");
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const context = canvas.getContext("2d");
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch(function (err) {
-          console.log("An error occurred: " + err);
-        });
-    }
-    video.addEventListener("play", function () {
-      setInterval(function () {
-        context?.drawImage(video, 0, 0, 640, 480);
-      }, 16);
-    });
-  }, []);
 
-  useEffect(() => {
-    let detectionInterval:any;
-
-    const modelLoaded = () => {
-
-      detectionInterval = setInterval(() => {
-        detect();
-      }, 200);
-    };
-
-    const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-
-    const detect = () => {
-
-      objectDetector.detect(stream, (err:any, results:any) => {
-        const ctx = canvas.getContext('2d');
-        ctx?.clearRect(0, 0, canvas.width, canvas.height);
-        if (results && results.length) {
-          results.forEach((detection:any) => {
-            ctx?.beginPath();
-            ctx ? ctx.fillStyle = "#FF0000" : null;
-            const { label, x, y, width, height } = detection;
-            ctx?.fillText(label, x, y - 5);
-            ctx?.rect(x, y, width, height);
-            ctx?.stroke();
-          });
-        }
-      });
-    };
-
-    return () => {
-      if (detectionInterval) {
-        clearInterval(detectionInterval);
-      }
-    }
-
-  }, [canvas.width, canvas.height]);
-
-
-
- 
-  
 
   //returning the page component
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {/* html canvas element that is populated by users webcam */}
-      <canvas id="canvas" width="400" height="500" className="canvas"></canvas>
-
+      <canvas id="canvas" width="400" height="500"></canvas>
       {/* button to start the live stream */}
       <Button
         className={`bg-primary border-primary text-background px-4 py-2.5`}
