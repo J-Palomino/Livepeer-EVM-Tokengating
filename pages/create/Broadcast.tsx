@@ -1,83 +1,109 @@
-//React functional component that takes the users camera and microphone places it in a canvas element then streams it to a livepeer stream
-// This is the main page for the broadcast feature
+import React, { useEffect, useRef } from 'react';
+import { Button } from '../../components/shared';
 
-
-import React, { useEffect, useState, useRef } from "react";
-import { Page, Nav } from "../../components";
-import { Button } from "../../components/shared";
-import * as ml5 from "ml5";
-import 'webrtc';
-
-const dimensions = {
-  width: 800,
-  height: 500
+let ml5: { objectDetector: (arg0: string, arg1: () => void) => any; };
+if (typeof window !== 'undefined') {
+  ml5 = require('ml5');
 }
 
-
-
-export default function Broadcast(props: any) {
-  // populate the canvas element with the users webcam
-  const webcamRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { width, height } = dimensions;
-
-  const detect = async () => {
-    if (webcamRef.current && canvasRef.current) {
-      const video = webcamRef.current;
-      const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
-      if (context) {
-        video.width = width;
-        video.height = height;
-        context.drawImage(video, 0, 0, width, height);
-      }
-    }
-  }
+export default function Broadcast(props: { streamID: any; }) {
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
 
   useEffect(() => {
-    let detectionInterval;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
 
-    const modelLoaded = () => {
-      if (webcamRef.current && canvasRef.current) {
-        webcamRef.current.width = width;
-        webcamRef.current.height = height;
-        canvasRef.current.width = width;
-        canvasRef.current.height = height;
-      }
-
-      detectionInterval = setInterval(() => {
-        detect();
-      }, 200);
-    };
-    const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-  }, []);
-  useEffect(() => {
-    const video = document.createElement("video");
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const context = canvas.getContext("2d");
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
+    async function setupCamera() {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        if (video) {
+          video.srcObject = mediaStream;
           video.play();
-        })
-        .catch(function (err) {
-          console.log("An error occurred: " + err);
-        });
+        }
+        streamRef.current = mediaStream;
+      } catch (err) {
+        console.error('An error occurred:', err);
+      }
     }
-    video.addEventListener("play", function () {
-      setInterval(function () {
-        context?.drawImage(video, 0, 0, 640, 480);
-      }, 16);
-    });
+
+    if (canvas && video) {
+      video.addEventListener('play', () => {
+        function draw() {
+          if (video.paused || video.ended) return;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(draw);
+        }
+        draw();
+      });
+    }
+
+    setupCamera();
+
+    return () => {
+      if (video && video.srcObject) {
+        video.srcObject.getTracks().forEach((track: { stop: () => any; }) => track.stop());
+      }
+    };
   }, []);
 
+  useEffect(() => {
+    let detectionInterval: string | number | NodeJS.Timeout | undefined;
 
+    if (typeof window !== 'undefined' && ml5) {
+      const modelLoaded = () => {
+        console.log('Model Loaded!');
+        detectionInterval = setInterval(() => {
+          detect();
+        }, 200);
+      };
+
+      const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+
+      const detect = () => {
+        if (!streamRef.current) return;
+        objectDetector.detect(canvasRef.current, (err: any, results: { label: any; x: any; y: any; width: any; height: any; }[]) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          const ctx = canvasRef.current.getContext('2d');
+          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          results.forEach(({ label, x, y, width, height }) => {
+            ctx.beginPath();
+            ctx.fillStyle = "#FF0000";
+            ctx.fillText(label, x, y - 5);
+            ctx.rect(x, y, width, height);
+            ctx.stroke();
+          });
+        });
+      };
+    }
+
+    return () => {
+      if (detectionInterval) clearInterval(detectionInterval);
+    };
+  }, []);
 
   const startStream = async () => {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const stream = canvas.captureStream(30);
+
+    // objectDetector.detect(stream, (err:any, results:any) => {
+
+    // const ctx = canvas.getContext('2d');
+    // ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    // if (results && results.length) {
+    //   results.forEach((detection:any) => {
+    //     ctx?.beginPath();
+    //     ctx ? ctx.fillStyle = "#FF0000" : null;
+    //     const { label, x, y, width, height } = detection;
+    //     ctx?.fillText(label, x, y - 5);
+    //     ctx?.rect(x, y, width, height);
+    //     ctx?.stroke();
+    //   });
+    // }
+    // });
     const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
     const host = new URL(redirectUrl).host;
@@ -167,15 +193,12 @@ export default function Broadcast(props: any) {
 
   };
 
-
-  //returning the page component
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {/* html canvas element that is populated by users webcam */}
-      <canvas id="canvas" width="400" height="500"></canvas>
-      {/* button to start the live stream */}
+      <video ref={videoRef} style={{ display: 'none' }} />
+      <canvas ref={canvasRef} width="400" height="500" className="canvas"></canvas>
       <Button
-        className={`bg-primary border-primary text-background px-4 py-2.5`}
+        className="bg-primary border-primary text-background px-4 py-2.5"
         text="text-sm"
         onClick={() => startStream()}
       >
