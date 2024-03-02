@@ -7,6 +7,9 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import Select from "../../components/shared/Select";
 import Broadcast from "../create/Broadcast";
+import Banner from "../banner";
+import { useAccount } from "wagmi";
+
 
 const options = [
   { value: "1", label: "Ethereum" },
@@ -25,7 +28,6 @@ export default function Create() {
   const [shareLink, setShareLink] = useState<string | null>(null);
   const [chain, setChain] = useState<string | null>("");
 
-let address = '0x123'
   const {
     mutate: createStream,
     data: stream,
@@ -33,9 +35,9 @@ let address = '0x123'
   } = useCreateStream(
     streamName
       ? {
-          name: streamName,
-          playbackPolicy: { type: "jwt" },
-        }
+        name: streamName,
+        playbackPolicy: { type: "jwt" },
+      }
       : null
   );
 
@@ -86,133 +88,90 @@ let address = '0x123'
     });
   };
 
+  const { address, isConnecting, isDisconnected, isConnected } = useAccount();
+
   return (
-    <Page>
+    <>
       <Nav />
       <div className="flex flex-col items-center justify-center mx-12">
-  
-          <>
-            {stream ? (
-              <div className="w-1/2 mt-20">
-                <h3 className="text-2xl font-medium text-white">Stream Info</h3>
-                <p className="mt-4 text-zinc-400">
-                  Use these details to connect to Livepeer from streaming
-                  software like{" "}
-                  <Link
-                    href="https://docs.livepeer.studio/guides/live/stream-via-obs"
-                    className="text-primary "
-                  >
-                    OBS
-                  </Link>
-                </p>
-                <div className="flex flex-col mt-2">
-                  <div className="flex mt-2">
-                    <p className="w-32 font-regular text-zinc-500 ">
-                      Stream Name:{" "}
-                    </p>
-                    <p className="ml-2 text-white">{stream?.name}</p>
-                  </div>
+        <>
+          {
+            isConnected ?
+              stream ? (
+                <div className="w-1/2 mt-20">
+                  <div className="flex flex-col mt-2">
+                    {/* <div className="flex mt-2">
+                  <p className="w-32 font-regular text-zinc-500 ">
+                    Display Name:{" "}
+                  </p>
+                  <p className="ml-2 text-black">{stream?.name}</p>
+                </div> */}
 
-                  <div className="flex mt-2">
-                    <p className="w-32 font-regular text-zinc-500">
-                      Playback Id:{" "}
-                    </p>
-                    <p className="ml-2 text-white">{stream?.playbackId}</p>
-                  </div>
+                    {/* <div className="flex mt-2">
+                  <p className="w-32 font-regular text-zinc-500">
+                    Playback Id:{" "}
+                  </p>
+                  <p className="ml-2 text-black">{stream?.playbackId}</p>
+                </div> */}
 
-                  <div className="flex mt-2">
-                    <p className="w-32 font-regular text-zinc-500">
-                      Stream Key:{" "}
-                    </p>
-                    <p className="ml-2 text-white">{stream?.streamKey}</p>
-                  </div>
+                    {/* <div className="flex mt-2">
+                  <p className="w-32 font-regular text-zinc-500">
+                    Stream Key:{" "}
+                  </p>
+                  <p className="ml-2 text-black">{stream?.streamKey}</p>
+                </div> */}
 
-                  <div className="flex mt-2">
-                    <p className="w-32 font-regular text-zinc-500">
-                      Ingest URL:{" "}
-                    </p>
-                    <p className="ml-2 text-white hover:text-primary hover:cursor-pointer">
-                      {stream?.rtmpIngestUrl}
-                    </p>
+                    {/* <div className="flex mt-2">
+                  <p className="w-32 font-regular text-zinc-500">
+                    Ingest URL:{" "}
+                  </p>
+                  <p className="ml-2 text-black hover:text-primary hover:cursor-pointer">
+                    {stream?.rtmpIngestUrl}
+                  </p>
+                </div> */}
                   </div>
-                </div>
-                <h3 className="mt-10 text-2xl font-medium text-white">
-                  Token Gating Requirements
-                </h3>
-                <div className="flex flex-row justify-between mt-4">
-                  <div className="w-[100%]">
-                    <Select
-                      label="Chain and Network"
-                      placeholder="0x..."
-                      data={options}
-                      onChange={(e) => setChain(e.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-row justify-between mt-1">
-                  <div className="w-[42%]">
-                    <Input
-                      label="Asset address"
-                      placeholder="0x..."
-                      onChange={(e) => setAssetAddress(e.target.value)}
-                    />
-                  </div>
-                  <p className="mt-10 text-zinc-400">and/or</p>
-                  <div className="w-[42%]">
-                    <Input
-                      label={`Amount of native token`}
-                      type="number"
-                      placeholder="20 ETH"
-                      onChange={(e) => setTokenAmount(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <Button
-                  className={`bg-primary border-primary text-background px-5 py-3 mt-2 border hover:border-primary hover:text-primary hover:bg-background`}
-                  text="text-md"
-                  onClick={() => saveStream()}
-                >
-                  Save and continue
-                </Button>
-
-                <Button
-                  className={`bg-zinc-700 text-white px-5 py-3 mt-2 border-none  ml-6 ${
-                    !shareLink ? " cursor-not-allowed opacity-20 " : ""
-                  }`}
-                  text="text-md"
-                  onClick={copy}
-                >
-                  Copy link
-                  <Copy text={shareLink} />
-                </Button>
-              </div>
-            ) : (
-              <div className="w-1/3 mt-20">
-                <Input
-                  label="Stream Name"
-                  placeholder="My first stream"
-                  onChange={(e) => setStreamName(e.target.value)}
-                />
-                <div className="flex justify-end">
+                  <Broadcast />
                   <Button
-                    className={`bg-primary border-primary text-background px-4 py-2.5 ${
-                      status === "loading" || !address || !streamName
-                        ? "cursor-not-allowed opacity-20"
-                        : ""
-                    }`}
-                    text="text-sm"
-                    onClick={() => createStream?.()}
+                    className={`bg-zinc-700 text-black px-5 py-3 mt-2 border-none  ml-6 ${!shareLink ? " cursor-not-allowed opacity-20 " : ""
+                      }`}
+                    text="text-md"
+                    onClick={copy}
                   >
-                    Create Stream
+                    Copy link
+                    <Copy text={shareLink} />
                   </Button>
-                  
-                </div><Broadcast/>
-              </div>
-            )}
-          </>
+                </div>
+              ) : (
+                <>
+                  <div className="w-1/3 mt-44">
+                    <input
+                      // label="Connected account"
+                      placeholder={`${address}`}
+                      onChange={(e) => setStreamName(e.target.value)}
+                      value={address}
+                      className="w-full h-12 px-4 border-2 border-primary bg-slate-900 text-white text-sm rounded-md"
+                    />
+                    <div className="flex justify-end">
+                      <Button
+                        className={`bg-primary border-primary text-background px-4 py-2.5 ${status === "loading" || !address || !streamName
+                          ? "cursor-not-allowed opacity-20"
+                          : ""
+                          }`}
+                        text="text-sm"
+                        onClick={() => createStream?.()}
+                      >
+                        Start Streaming
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Banner />
+              )
+          }
+        </>
 
       </div>
-    </Page>
+    </>
   );
 }

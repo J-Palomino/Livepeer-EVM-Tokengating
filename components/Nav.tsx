@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image'
 import Link from 'next/link'
 import { MovingBorderDemo } from './home/MovingBorderDemo';
+import { ConnectKitButton } from "connectkit";
+
 
 const DropdownMenu = () => {
   return (
@@ -80,7 +82,7 @@ const Navbar = () => {
             <h1 className="text-black text-lg md:text-2xl"
               style={{ background: 'linear-gradient(94deg, #E52200 0%, #FFA800 100%)', color: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', }}
             >N🚫 Bananas {' '}</h1>
-            <span className='text-3xl'>🍌</span>
+            <span className='md:text-3xl'>🍌</span>
           </Link>
           <div className="relative">
             <div className="md:hidden">
@@ -159,7 +161,11 @@ const Navbar = () => {
                 className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">FAQ</li>
             </ul>
           </div>
-          <MovingBorderDemo />
+          <Link href='/create' className="">
+            {/* <MovingBorderDemo /> */}
+            {/* <w3m-button /> */}
+            <ConnectKitButton />
+          </Link>
         </div>
       </div>
       <div className='bg-white/5 max-w-5xl mx-auto' style={{
