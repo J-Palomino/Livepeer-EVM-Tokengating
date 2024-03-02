@@ -2,15 +2,43 @@
 // This is the main page for the broadcast feature
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Page, Nav } from "../../components";
 import { Button } from "../../components/shared";
+import * as ml5 from "ml5";
 import 'webrtc';
+
+const dimensions = {
+  width: 800,
+  height: 500
+}
 
 
 
 export default function Broadcast(props:any) {
   // populate the canvas element with the users webcam
+  const webcamRef = useRef();
+  const canvasRef = useRef();
+  const { width, height } = dimensions;
+
+
+  useEffect(() => {
+    let detectionInterval;
+
+    const modelLoaded = () => {
+      if
+      webcamRef.current.video.width = width;
+      webcamRef.current.video.height = height;
+      canvasRef.current.width = width;
+      canvasRef.current.height = height;
+
+
+      detectionInterval = setInterval(() => {
+        detect();
+      }, 200);
+    };
+  const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+  }, []);
   useEffect(() => {
     const video = document.createElement("video");
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
