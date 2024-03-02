@@ -2,6 +2,7 @@ import React from 'react'
 import { TextGenerateEffectDemo } from '../components/home/TextGenerateEffectDemo'
 import { MovingBorderDemo } from '../components/home/MovingBorderDemo'
 import { motion } from 'framer-motion'
+import { ConnectKitButton } from 'connectkit'
 
 const Banner = () => {
     return (
@@ -13,6 +14,7 @@ const Banner = () => {
                 transition={{ duration: 1, delay: 2 }}
             >
                 <MovingBorderDemo title='Connect Wallet' />
+                <ConnectKitButton />
             </motion.div>
         </div>
     )
