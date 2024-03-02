@@ -157,15 +157,11 @@ const Navbar = () => {
                 className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Start now</li>
             </ul>
           </div>
-          {
-            isConnected ? (
-              <ConnectKitButton />
-            ) : (
-              <Link href='/create' className="">
-                <MovingBorderDemo />
-              </Link>
-            )
-          }
+
+          <Link href='/create' className="">
+            <MovingBorderDemo />
+          </Link>
+
         </div>
       </div>
       <div className='bg-white/5 max-w-5xl mx-auto' style={{
