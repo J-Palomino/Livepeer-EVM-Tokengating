@@ -17,6 +17,10 @@ export default function Home() {
         <link rel="canonical" href="https://www.nobananas.com/" />
         <link rel="icon" type="image/png" href="/favicon.ico" />
 
+        {/* add manifest and icons */}
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png" />
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.nobananas.com/" />
         <meta property="og:title" content="No Bananas: Safe Streaming for Everyone" />
