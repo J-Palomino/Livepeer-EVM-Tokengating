@@ -7,14 +7,14 @@ if (typeof window !== 'undefined') {
 }
 
 export default function Broadcast(props: { streamID: any; }) {
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const streamRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas!.getContext('2d');
 
     async function setupCamera() {
       try {
@@ -32,8 +32,8 @@ export default function Broadcast(props: { streamID: any; }) {
     if (canvas && video) {
       video.addEventListener('play', () => {
         function draw() {
-          if (video.paused || video.ended) return;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          if (!video || video.paused || video.ended) return;
+          context!.drawImage(video, 0, 0, canvas!.width, canvas!.height);
           requestAnimationFrame(draw);
         }
         draw();
@@ -44,7 +44,7 @@ export default function Broadcast(props: { streamID: any; }) {
 
     return () => {
       if (video && video.srcObject) {
-        video.srcObject.getTracks().forEach((track: { stop: () => any; }) => track.stop());
+        (video.srcObject as MediaStream).getTracks().forEach((track: { stop: () => any; }) => track.stop());
       }
     };
   }, []);
@@ -69,14 +69,14 @@ export default function Broadcast(props: { streamID: any; }) {
             console.error(err);
             return;
           }
-          const ctx = canvasRef.current.getContext('2d');
-          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          const ctx = canvasRef.current?.getContext('2d');
+          ctx!.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
           results.forEach(({ label, x, y, width, height }) => {
-            ctx.beginPath();
-            ctx.fillStyle = "#FF0000";
-            ctx.fillText(label, x, y - 5);
-            ctx.rect(x, y, width, height);
-            ctx.stroke();
+            ctx!.beginPath();
+            ctx!.fillStyle = "#FF0000";
+            ctx!.fillText(label, x, y - 5);
+            ctx!.rect(x, y, width, height);
+            ctx!.stroke();
           });
         });
       };
@@ -120,7 +120,7 @@ export default function Broadcast(props: { streamID: any; }) {
     ];
 
     // get user media from the browser (which are camera/audio sources)
-    const mediaStream = stream
+    const mediaStream = streamRef.current;
     const peerConnection = new RTCPeerConnection({ iceServers });
 
 
