@@ -107,12 +107,12 @@ export default function Create() {
                   <p className="ml-2 text-black">{stream?.name}</p>
                 </div> */}
 
-                    {/* <div className="flex mt-2">
-                  <p className="w-32 font-regular text-zinc-500">
-                    Playback Id:{" "}
-                  </p>
-                  <p className="ml-2 text-black">{stream?.playbackId}</p>
-                </div> */}
+                    <div className="flex mt-2">
+                      <p className="w-32 font-regular text-zinc-500">
+                        Playback Id:{" "}
+                      </p>
+                      <p className="ml-2 text-black">{stream?.playbackId}</p>
+                    </div>
 
                     {/* <div className="flex mt-2">
                   <p className="w-32 font-regular text-zinc-500">
@@ -121,14 +121,19 @@ export default function Create() {
                   <p className="ml-2 text-black">{stream?.streamKey}</p>
                 </div> */}
 
-                    {/* <div className="flex mt-2">
-                  <p className="w-32 font-regular text-zinc-500">
-                    Ingest URL:{" "}
-                  </p>
-                  <p className="ml-2 text-black hover:text-primary hover:cursor-pointer">
-                    {stream?.rtmpIngestUrl}
-                  </p>
-                </div> */}
+                    <div className="flex mt-2">
+                      <p className="w-32 font-regular text-zinc-500">
+                        Ingest URL:{" "}
+                      </p>
+                      {/* <p className="ml-2 text-black hover:text-primary hover:cursor-pointer">
+                        {stream?.rtmpIngestUrl}
+                      </p> */}
+
+                      <Link target="_blank" href={`${window.location.origin}/watch/${stream?.playbackId}`}>
+                        {window.location.origin}/watch/${stream?.playbackId}
+                      </Link>
+
+                    </div>
                   </div>
                   <Broadcast />
                   <Button
