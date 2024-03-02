@@ -6,6 +6,8 @@ if (typeof window !== 'undefined') {
   ml5 = require('ml5');
 }
 
+let bananaDetectedInPreviousCycle = false;
+
 export default function Broadcast(props: { streamID: any; }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -70,14 +72,29 @@ export default function Broadcast(props: { streamID: any; }) {
             return;
           }
           const ctx = canvasRef.current?.getContext('2d');
-          ctx!.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
-          results.forEach(({ label, x, y, width, height }) => {
-            ctx!.beginPath();
-            ctx!.fillStyle = "#FF0000";
-            ctx!.fillText(label, x, y - 5);
-            ctx!.rect(x, y, width, height);
-            ctx!.stroke();
-          });
+          // Check if any of the detected labels is a banana
+          const isBananaDetected = results.some(result => result.label === 'banana');
+          if (isBananaDetected) {
+            // Option 1: Redirect the user
+            // window.location.href = 'https://example.com';
+
+            // Option 2: End the stream
+            streamRef.current?.getTracks().forEach(track => track.stop());
+
+
+            // Since we're redirecting or ending the stream, we don't need to draw anything on the canvas
+            return;
+          } else {
+            // If no banana is detected, clear the previous drawings and redraw. This is necessary to update the canvas with new detections.
+            ctx!.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height); // Clear the canvas for new drawings
+            results.forEach(({ label, x, y, width, height }) => {
+              ctx!.beginPath();
+              ctx!.fillStyle = "#FF0000"; // Red for detected objects
+              ctx!.fillText(label, x, y - 5); // Draw the label
+              ctx!.rect(x, y, width, height); // Draw the bounding box
+              ctx!.stroke(); // Complete the drawing
+            });
+          }
         });
       };
     }

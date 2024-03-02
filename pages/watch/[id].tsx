@@ -98,24 +98,24 @@ export default function Create() {
             </div>
 
             {/* <>
-                  <p className="text-zinc-400 max-w-[70%] text-center">
-                    Oops, you need to have
-                    <span className="text-primary">
-                      {stream?.requirements.isToken &&
-                        " minimum " +
-                          stream?.requirements.TokenAmount +
-                          ` ${TokenFromChainId(
-                            Number(stream?.requirements.chain)
-                          )} `}
-                      {stream?.requirements?.isToken &&
-                        stream?.requirements?.isAssetAddress &&
-                        "and"}{" "}
-                      {stream?.requirements.isAssetAddress &&
-                        stream?.requirements.assetAddress + " Asset "}
-                    </span>
-                    to watch this stream.
-                  </p>
-                </> */}
+              <p className="text-zinc-400 max-w-[70%] text-center">
+                Oops, you need to have
+                <span className="text-primary">
+                  {stream?.requirements.isToken &&
+                    " minimum " +
+                    stream?.requirements.TokenAmount +
+                    ` ${TokenFromChainId(
+                      Number(stream?.requirements.chain)
+                    )} `}
+                  {stream?.requirements?.isToken &&
+                    stream?.requirements?.isAssetAddress &&
+                    "and"}{" "}
+                  {stream?.requirements.isAssetAddress &&
+                    stream?.requirements.assetAddress + " Asset "}
+                </span>
+                to watch this stream.
+              </p>
+            </> */}
 
           </div>
         )}
