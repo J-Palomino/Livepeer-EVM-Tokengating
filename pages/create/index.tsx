@@ -36,7 +36,6 @@ export default function Create() {
     streamName
       ? {
         name: streamName,
-        playbackPolicy: { type: "jwt" },
       }
       : null
   );
@@ -154,7 +153,7 @@ export default function Create() {
                       placeholder={`${address}`}
                       onChange={(e) => setStreamName(e.target.value)}
                       value={address}
-                      className="w-full h-12 px-4 border-2 border-primary bg-slate-900 text-white text-sm rounded-md"
+                      className="w-full h-12 px-4 text-sm text-white border-2 rounded-md border-primary bg-slate-900"
                     />
                     <div className="flex justify-end">
                       <Button
