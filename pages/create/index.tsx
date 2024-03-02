@@ -75,8 +75,7 @@ export default function Create() {
   };
 
   const copy = () => {
-    if (!shareLink) return;
-    navigator.clipboard.writeText(shareLink);
+    navigator.clipboard.writeText(`${window.location.origin}/watch/${stream?.playbackId}`);
     toast("Copied link to clipboard!", {
       icon: "📋",
       style: {
@@ -105,12 +104,12 @@ export default function Create() {
                   <p className="ml-2 text-black">{stream?.name}</p>
                 </div> */}
 
-                    <div className="flex mt-2">
+                    {/* <div className="flex mt-2">
                       <p className="w-32 font-regular text-zinc-500">
                         Playback Id:{" "}
                       </p>
                       <p className="ml-2 text-black">{stream?.playbackId}</p>
-                    </div>
+                    </div> */}
 
                     {/* <div className="flex mt-2">
                   <p className="w-32 font-regular text-zinc-500">
@@ -136,13 +135,12 @@ export default function Create() {
                   
                   <Broadcast streamID={stream.streamKey}/>
                   <Button
-                    className={`bg-zinc-700 text-black px-5 py-3 mt-2 border-none  ml-6 ${!shareLink ? " cursor-not-allowed opacity-20 " : ""
-                      }`}
+                    className={`bg-orange-300 text-black px-5 py-3 mt-2 border-none  ml-6 `}
                     text="text-md"
                     onClick={copy}
                   >
                     Copy link
-                    <Copy text={shareLink} />
+                    <Copy text={`${window.location.origin}/watch/${stream?.playbackId}`} />
                   </Button>
                 </div>
               ) : (

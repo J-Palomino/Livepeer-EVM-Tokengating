@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Start = () => {
     return (
-        <div className="relative w-full md:min-h-80 mb-12 mt-32 px-6 md:px-0">
+        <div id='start' className="relative w-full md:min-h-80 mb-12 mt-32 px-6 md:px-0">
             <div
                 style={{ background: 'linear-gradient(94deg, #FFF2A2 0%, #FFFDF3 100%)', boxShadow: '5px 5px 40px rgba(249, 209, 44, .3)', borderRadius: 50 }}
                 className="max-w-6xl mx-auto h-96 md:h-72 shadow flex flex-col-reverse md:flex-row items-center px-6 md:p-16 md:gap-4 md:pr-0 pt-4 pb-8">
@@ -19,7 +19,7 @@ const Start = () => {
 
                 </div>
 
-                    <Image src="/assets/cancel.png" alt="Chip" width={500} height={500} className="w-64 md:w-2/5 md:mb-36 md:-mr-16" />
+                <Image src="/assets/cancel.png" alt="Chip" width={500} height={500} className="w-64 md:w-2/5 md:mb-36 md:-mr-16" />
 
             </div>
         </div>

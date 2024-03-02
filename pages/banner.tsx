@@ -13,7 +13,7 @@ const Banner = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: 3 }}
             >
-                <MovingBorderDemo title='Connect Wallet' />
+                {/* <MovingBorderDemo title='Connect Wallet' /> */}
                 <ConnectKitButton />
             </motion.div>
         </div>

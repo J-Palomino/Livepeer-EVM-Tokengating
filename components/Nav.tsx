@@ -80,6 +80,7 @@ const Navbar = () => {
           <Link
             href={'/'}
             className='cursor-pointer transition-all duration-300 flex items-center gap-1.5'
+            onClick={() => scrollToSection('home')}
           >
             <Image
               src="/assets/logos/logo.png"
@@ -114,25 +115,18 @@ const Navbar = () => {
                       {isDropdownOpen && <DropdownMenu />}
                     </li> */}
                     <li
-                      onClick={() => scrollToSection('features')}
-                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Home</li>
-                    <li
-                      onClick={() => scrollToSection('pricing')}
+                      onClick={() => scrollToSection('tech')}
                       className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">How it Works</li>
                     <li
-                      onClick={() => scrollToSection('participate')}
-                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Features</li>
+                      onClick={() => scrollToSection('features')}
+                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Key Features</li>
                     <li
                       onClick={() => scrollToSection('roadmap')}
-                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Success stories</li>
+                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Roadmap</li>
+
                     <li
-                      onClick={() => scrollToSection('use-cases')}
-                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Use cases</li>
-                    <li
-                      onClick={() => scrollToSection('faq')}
-                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">FAQ</li>
-                    {/* inverted dapp button */}
-                    <MovingBorderDemo />
+                      onClick={() => scrollToSection('start')}
+                      className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Start now</li>
                   </ul>
                 </motion.div>
               )}
@@ -147,22 +141,20 @@ const Navbar = () => {
                 </span>
                 {isDropdownOpen && <DropdownMenu />}
               </li> */}
-              <li
-                onClick={() => scrollToSection('features')}
-                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Home</li>
-              <li
-                onClick={() => scrollToSection('pricing')}
-                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">How it Works</li>
-              <li
-                onClick={() => scrollToSection('participate')}
-                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Features</li>
-              <li
-                onClick={() => scrollToSection('roadmap')}
-                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Success stories</li>
 
               <li
-                onClick={() => scrollToSection('faq')}
-                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">FAQ</li>
+                onClick={() => scrollToSection('tech')}
+                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">How it Works</li>
+              <li
+                onClick={() => scrollToSection('features')}
+                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Key Features</li>
+              <li
+                onClick={() => scrollToSection('roadmap')}
+                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Roadmap</li>
+
+              <li
+                onClick={() => scrollToSection('start')}
+                className="cursor-pointer transition-all duration-300 menu-item-hover hover:text-black">Start now</li>
             </ul>
           </div>
           {
