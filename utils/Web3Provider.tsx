@@ -19,13 +19,9 @@ const config = createConfig(
         walletConnectProjectId: "42b7a7c7fa98125d70efe9ce6d8ea907",
 
         // Required App Info
-        appName: "Your App Name",
-
-        // Optional App Info
-        appDescription: "Your App Description",
-        appUrl: "https://family.co", // your app's url
-        appIcon: "https://family.co/logo.png", // your app's icon, no bigger than 1024x1024px (max. 1MB)
+        appName: "No Bananas",
     }),
+
 );
 
 const queryClient = new QueryClient();

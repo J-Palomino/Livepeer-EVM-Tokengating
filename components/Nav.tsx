@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MovingBorderDemo } from './home/MovingBorderDemo';
 import { ConnectKitButton } from "connectkit";
+import { useAccount } from 'wagmi';
 
 
 const DropdownMenu = () => {
@@ -19,6 +20,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { isConnected } = useAccount();
 
   const scrollToSection = (sectionId: string) => {
     setIsMenuOpen(false);
@@ -162,9 +164,13 @@ const Navbar = () => {
             </ul>
           </div>
           <Link href='/create' className="">
-            {/* <MovingBorderDemo /> */}
-            {/* <w3m-button /> */}
-            <ConnectKitButton />
+            {
+              isConnected ? (
+                <ConnectKitButton />
+              ) : (
+                <MovingBorderDemo />
+              )
+            }
           </Link>
         </div>
       </div>
