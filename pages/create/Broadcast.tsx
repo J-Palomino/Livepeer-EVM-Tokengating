@@ -10,52 +10,24 @@ import 'webrtc';
 
 export default function Broadcast(props: any) {
   // populate the canvas element with the users webcam
-  if(typeof window == "undefined"){ 
-    return <></>;
-  }
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const video = document.createElement("video");
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const context = canvas.getContext("2d");
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch(function (err) {
-          console.log("An error occurred: " + err);
-        });
-    }
-    video.addEventListener("play", function () {
-      setInterval(function () {
-        context?.drawImage(video, 0, 0, 640, 480);
-      }, 16);
-    });
-  }, []);
-
-
-  // const objectDetector = ml5.objectDetector('cocossd');
-
+  let canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  let stream = canvas.captureStream(30);
   const startStream = async () => {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const stream = canvas.captureStream(30);
-    // objectDetector.detect(stream, (err:any, results:any) => {
 
-    //   const ctx = canvas.getContext('2d');
-    //   ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    //   if (results && results.length) {
-    //     results.forEach((detection:any) => {
-    //       ctx?.beginPath();
-    //       ctx ? ctx.fillStyle = "#FF0000" : null;
-    //       const { label, x, y, width, height } = detection;
-    //       ctx?.fillText(label, x, y - 5);
-    //       ctx?.rect(x, y, width, height);
-    //       ctx?.stroke();
-    //     });
-    //   }
+    // objectDetector.detect(stream, (err:any, results:any) => {
+  
+      // const ctx = canvas.getContext('2d');
+      // ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      // if (results && results.length) {
+      //   results.forEach((detection:any) => {
+      //     ctx?.beginPath();
+      //     ctx ? ctx.fillStyle = "#FF0000" : null;
+      //     const { label, x, y, width, height } = detection;
+      //     ctx?.fillText(label, x, y - 5);
+      //     ctx?.rect(x, y, width, height);
+      //     ctx?.stroke();
+      //   });
+      // }
     // });
     const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
@@ -145,6 +117,71 @@ export default function Broadcast(props: any) {
     }
 
   };
+  
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const video = document.createElement("video");
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const context = canvas.getContext("2d");
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(function (err) {
+          console.log("An error occurred: " + err);
+        });
+    }
+    video.addEventListener("play", function () {
+      setInterval(function () {
+        context?.drawImage(video, 0, 0, 640, 480);
+      }, 16);
+    });
+  }, []);
+
+  useEffect(() => {
+    let detectionInterval:any;
+
+    const modelLoaded = () => {
+
+      detectionInterval = setInterval(() => {
+        detect();
+      }, 200);
+    };
+
+    const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
+
+    const detect = () => {
+
+      objectDetector.detect(stream, (err:any, results:any) => {
+        const ctx = canvas.getContext('2d');
+        ctx?.clearRect(0, 0, canvas.width, canvas.height);
+        if (results && results.length) {
+          results.forEach((detection:any) => {
+            ctx?.beginPath();
+            ctx ? ctx.fillStyle = "#FF0000" : null;
+            const { label, x, y, width, height } = detection;
+            ctx?.fillText(label, x, y - 5);
+            ctx?.rect(x, y, width, height);
+            ctx?.stroke();
+          });
+        }
+      });
+    };
+
+    return () => {
+      if (detectionInterval) {
+        clearInterval(detectionInterval);
+      }
+    }
+
+  }, [canvas.width, canvas.height]);
+
+
+
+ 
   
 
   //returning the page component
