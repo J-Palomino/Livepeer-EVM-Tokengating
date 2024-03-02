@@ -1,44 +1,19 @@
 //React functional component that takes the users camera and microphone places it in a canvas element then streams it to a livepeer stream
 // This is the main page for the broadcast feature
 
-
-import React, { useEffect, useState, useRef } from "react";
-import { Page, Nav } from "../../components";
+import React, { useEffect} from "react";
 import { Button } from "../../components/shared";
 import * as ml5 from "ml5";
 import 'webrtc';
-
-const dimensions = {
-  width: 800,
-  height: 500
-}
 
 
 
 export default function Broadcast(props: any) {
   // populate the canvas element with the users webcam
-  const webcamRef = useRef();
-  const canvasRef = useRef();
-  const { width, height } = dimensions;
-
-
-  useEffect(() => {
-    let detectionInterval;
-
-    // const modelLoaded = () => {
-    //   if
-    //   webcamRef.current.video.width = width;
-    //   webcamRef.current.video.height = height;
-    //   canvasRef.current.width = width;
-    //   canvasRef.current.height = height;
-
-
-    //   detectionInterval = setInterval(() => {
-    //     detect();
-    //   }, 200);
-    // };
-    // const objectDetector = ml5.objectDetector('cocossd', modelLoaded);
-  }, []);
+  if(typeof window == "undefined"){ 
+    return <></>;
+  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const video = document.createElement("video");
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -62,10 +37,26 @@ export default function Broadcast(props: any) {
   }, []);
 
 
+  // const objectDetector = ml5.objectDetector('cocossd');
 
   const startStream = async () => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const stream = canvas.captureStream(30);
+    // objectDetector.detect(stream, (err:any, results:any) => {
+
+    //   const ctx = canvas.getContext('2d');
+    //   ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    //   if (results && results.length) {
+    //     results.forEach((detection:any) => {
+    //       ctx?.beginPath();
+    //       ctx ? ctx.fillStyle = "#FF0000" : null;
+    //       const { label, x, y, width, height } = detection;
+    //       ctx?.fillText(label, x, y - 5);
+    //       ctx?.rect(x, y, width, height);
+    //       ctx?.stroke();
+    //     });
+    //   }
+    // });
     const redirectUrl = `https://mia-prod-catalyst-0.lp-playback.studio:443/webrtc/${props.streamID}`;
     // we use the host from the redirect URL in the ICE server configuration
     const host = new URL(redirectUrl).host;
@@ -154,13 +145,14 @@ export default function Broadcast(props: any) {
     }
 
   };
-
+  
 
   //returning the page component
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {/* html canvas element that is populated by users webcam */}
-      <canvas id="canvas" width="400" height="500"></canvas>
+      <canvas id="canvas" width="400" height="500" className="canvas"></canvas>
+
       {/* button to start the live stream */}
       <Button
         className={`bg-primary border-primary text-background px-4 py-2.5`}

@@ -129,7 +129,8 @@ export default function Create() {
 
                     </div> */}
                   </div>
-                  <Broadcast streamID={stream.streamKey} />
+                  { typeof window !== "undefined" &&
+                    <Broadcast streamID={stream.streamKey}/>}
                   <Button
                     className={`bg-orange-300 text-black px-5 py-3 mt-2 border-none  ml-6 `}
                     text="text-md"
@@ -141,9 +142,9 @@ export default function Create() {
                 </div>
               ) : (
                 <>
-                  <div className="w-full md:w-1/3 h-screen justify-center flex flex-col items-center space-y-4">
+                  <div className="flex flex-col items-center justify-center w-full h-screen space-y-4 md:w-1/3">
                     <label className="text-black md:text-3xl">Connected account</label>
-                    <p className="text-black text-xs font-semibold md:text-lg">{address}</p>
+                    <p className="text-xs font-semibold text-black md:text-lg">{address}</p>
                     <div className="flex justify-end mt-2">
                       <Button
                         className={`bg-primary border-primary text-background px-4 py-2.5 ${status === "loading" || !address
